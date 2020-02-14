@@ -12,6 +12,12 @@ public class TicTacToeClient {
 	private PrintWriter socketOut;
 	private BufferedReader socketIn, stdIn;
 
+	/**
+	 * Parameter constructor for the tic tac toe client, initializes the connection to the
+	 * server.
+	 * @param serverName The ip address of the server.
+	 * @param port The port number of the server on which the game is set up.
+	 */
 	public TicTacToeClient(String serverName, int port){
 		try {
 			socket = new Socket(serverName, port);
@@ -30,6 +36,10 @@ public class TicTacToeClient {
 
 	}
 	
+	/**
+	 * A perpetually running client method which receives messages from the server, and polls the user for
+	 * input when required.
+	 */
 	public void runningState() {
 		if(socket == null) {
 			System.out.println("Connection was not established successfully. Shutting down...");

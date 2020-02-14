@@ -1,4 +1,4 @@
-package server.model;
+package Ex5Files.server.model;
 
 import java.io.*;
 
@@ -7,6 +7,7 @@ public class Player{
 	private Board board;
 	private Player opponent;
 	private char mark;
+	private String name;
 
 	private PrintWriter socketOut;
 	private BufferedReader socketIn;
@@ -15,11 +16,16 @@ public class Player{
 	//GETTERS AND SETTERS
 
 	/**
-	 * Gets the mark of the player.
 	 * @return the playerMark
 	 */
 	public char getMark() {
 		return mark;
+	}
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
 	}
 	/**
 	 * Sets the mark of the player.
@@ -37,7 +43,8 @@ public class Player{
 	 * @param name	The name to set for the player.
 	 * @param mark	The mark to set for the player.
 	 */
-	public Player(char mark, BufferedReader socketIn, PrintWriter socketOut) {
+	public Player(String name, char mark, BufferedReader socketIn, PrintWriter socketOut) {
+		this.name = name;
 		this.mark = mark;
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
@@ -54,7 +61,7 @@ public class Player{
 	public void play() {
 		if(!gameActive()) {
 			opponent.gameActive();
-			System.out.println("Game Finished. Shutting down game...");
+			System.out.println("[GAME " + board.getId() + "]: Game Finished. Shutting down game...");
 			endGame(false);
 			opponent.endGame(false);
 			return;
@@ -63,7 +70,7 @@ public class Player{
 		try {
 			makeMove();
 		} catch (IOException e) {
-			System.err.println("Unable to get input from client. Shutting down game...");
+			System.err.println("[GAME " + board.getId() + "]: Unable to get input from client. Shutting down game...");
 			opponent.endGame(true);
 			e.printStackTrace();
 			try {
@@ -84,11 +91,11 @@ public class Player{
 
 	private void endGame(boolean error) {
 		if(!error) {
-			socketOut.println("Game is over. Please close game window.");
+			socketOut.println("Game is over.");
 			socketOut.println("SERVER: game over");
 		}
 		else {
-			socketOut.println("Unable to get input from opponent. Shutting down game... Please close game window");
+			socketOut.println("Unable to get input from opponent. Shutting down game...");
 			socketOut.println("SERVER: game over");
 		}
 		try {
@@ -114,7 +121,7 @@ public class Player{
 		incomingBoard = socketIn.readLine();
 		board.updateBoard(incomingBoard);
 		opponent.sendBoard();
-		System.out.println("Move successful, polling opponent.");
+		System.out.println("[GAME " + board.getId() + "]: Move successful, polling opponent.");
 		socketOut.println("Move successful.");
 	}
 
@@ -128,6 +135,7 @@ public class Player{
 	 */
 	public void setOpponent(Player opponent) {
 		this.opponent = opponent;
+		socketOut.println("Your opponent this game is: " + this.opponent.name + ".");
 	}
 
 	/**
@@ -151,14 +159,14 @@ public class Player{
 			if(mark == 'X')
 				socketOut.println("You win!");
 			else
-				socketOut.println("You lose!");
+				socketOut.println("You lost to: " + opponent.name + ".");
 			return false;
 		}
 		else if(board.oWins()) {
 			if(mark == 'O')
 				socketOut.println("You win!");
 			else
-				socketOut.println("You lose!");
+				socketOut.println("You lost to: " + opponent.name + ".");
 			return false;
 		}
 		else if(board.isFull()) {

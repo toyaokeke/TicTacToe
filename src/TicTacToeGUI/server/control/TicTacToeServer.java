@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import server.model.Game;
+import Ex5Files.server.model.Game;
 
 public class TicTacToeServer {
 	private ServerSocket serverSocket;
@@ -30,35 +30,70 @@ public class TicTacToeServer {
 		}
 	}
 
+	/**
+	 * Accepts player connections. Once two players are connected they are assigned a game ID
+	 * before the game is executed. If there is an error connecting a player the cancelled and
+	 * the connection to the server is closed
+	 */
 	public void acceptConnections(){
-		try {
-			while(true) {
+		int gameID = 1;
+		String[] playerNames = new String[2];
+		boolean playerConnected;
+		while(true) {
+			playerConnected = false;
+			try {
 				socket = serverSocket.accept();
-				System.out.println("A player has connected.");
-				System.out.println("Waiting for a second player to join...");
+				System.out.println("[GAME " + gameID + "]: A player has connected.");
+				System.out.println("[GAME " + gameID + "]: Waiting for a second player to join...");
 				socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				socketOut = new PrintWriter(socket.getOutputStream(), true);
-				socketOut.println("Connected to server as the first player, waiting for second player to join...");
 				socketOut.println("SERVER: mark assign X");
+				socketOut.println("SERVER: name poll");
+				playerNames[0] = socketIn.readLine();
+				System.out.println("[GAME " + gameID + "]: Player 1 name: " + playerNames[0] + ".");
+				socketOut.println("Connected to server as the first player, waiting for second player to join...");
 				
+				playerConnected = true;
+
 				socket2 = serverSocket.accept();
-				System.out.println("A second player has connected.");
-				System.out.println("Starting game...");
+				System.out.println("[GAME " + gameID + "]: A second player has connected.");
 				socketIn2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
 				socketOut2 = new PrintWriter(socket2.getOutputStream(), true);
+				socketOut2.println("SERVER: mark assign O");
+				socketOut2.println("SERVER: name poll");
+				playerNames[1] = socketIn2.readLine();
+				System.out.println("[GAME " + gameID + "]: Player 2 name: " + playerNames[1] + ".");
+				System.out.println("[GAME " + gameID + "]: Starting game...");
 				socketOut.println("Second player joined, starting game...");
 				socketOut2.println("Connected to server as the second player, starting game...");
-				socketOut2.println("SERVER: mark assign O");
-				
-				startGame();
+
+				startGame(playerNames, gameID);
+				gameID++;
+			} catch (IOException e){
+				System.err.println("[GAME " + gameID + "]: Unable to connect to client. Cancelling game start.");
+				e.printStackTrace();
+				if(playerConnected) {
+					socketOut.println("An unexpected error has occurred...");
+					socketOut.println("SERVER: game over");
+					try {
+						socketIn.close();
+						socketOut.close();
+					}
+					catch (IOException e1) {
+						e.printStackTrace();
+					}
+				}
 			}
-		} catch (IOException e){
-			e.printStackTrace();
-		}
+		} 
 	}
 
-	private void startGame() {
-		Game game = new Game(socketIn, socketOut, socketIn2, socketOut2);
+	/**
+	 * Starts a game in the threadpool using the two player names and game ID
+	 * @param names names of player X and O
+	 * @param id game ID
+	 */
+	private void startGame(String[] names, int id) {
+		Game game = new Game(socketIn, socketOut, socketIn2, socketOut2, id, names);
 		pool.execute(game);
 	}
 

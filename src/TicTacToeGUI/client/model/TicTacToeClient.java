@@ -8,7 +8,6 @@ import java.net.UnknownHostException;
 import java.io.BufferedReader;
 
 import Ex5Files.client.control.GameListener;
-import Ex5Files.client.control.*;
 
 public class TicTacToeClient {
 	private Socket socket;
@@ -16,6 +15,13 @@ public class TicTacToeClient {
 	private BufferedReader socketIn;
 	private GameListener controller;
 
+	/**
+	 * Parameter constructor for the client model. Sets up the input and output streams for connection
+	 * to the server.
+	 * @param serverName The ip address of the server.
+	 * @param port The port number for which the game communications are set up.
+	 * @param controller The controller class which coordinates between the game model and client view.
+	 */
 	public TicTacToeClient(String serverName, int port, GameListener controller){
 		try {
 			socket = new Socket(serverName, port);
@@ -32,6 +38,10 @@ public class TicTacToeClient {
 		this.controller = controller;
 	}
 	
+	/**
+	 * A perpetually running method of the client model which receives communications from the server
+	 * notifies the controller if user input is required.
+	 */
 	public void runningState() {
 		if(socket == null) {
 			System.out.println("Connection was not established successfully. Shutting down...");
@@ -43,6 +53,8 @@ public class TicTacToeClient {
 			try {
 				incomingLine = socketIn.readLine();
 			} catch (IOException e) {
+				controller.appendMessage("An unexpected exception occurred. Shutting down...");
+				controller.appendMessage("Please close game window.");
 				System.err.println("An unexpected exception occurred. Shutting down...");
 				e.printStackTrace();
 				break;
@@ -66,6 +78,7 @@ public class TicTacToeClient {
 					controller.setPlayerMark(charArr[charArr.length - 1]);
 				}
 				else if(incomingLine.contains("game over")) {
+					controller.appendMessage("Please close game window");
 					try {
 						socketIn.close();
 						socketOut.close();
@@ -85,6 +98,8 @@ public class TicTacToeClient {
 					}
 					controller.updateBoard(incomingLine);
 				}
+				else if(incomingLine.contains("name poll"))
+					socketOut.println(controller.pollPlayerName());
 			}
 			else {
 				System.out.println(incomingLine);

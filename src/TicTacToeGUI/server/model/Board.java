@@ -1,4 +1,4 @@
-package server.model;
+package Ex5Files.server.model;
 
 //STUDENTS SHOULD ADD CLASS COMMENTS, METHOD COMMENTS, FIELD COMMENTS 
 
@@ -7,11 +7,12 @@ public class Board implements Constants {
 	private char theBoard[][];
 	private int markCount;
 	String boardString;
+	private int id;
 
 	/**
 	 * Default constructor for Class Board. Initiates the board space and sets markCount to 0.
 	 */
-	public Board() {
+	public Board(int id) {
 		markCount = 0;
 		theBoard = new char[3][];
 		for (int i = 0; i < 3; i++) {
@@ -19,6 +20,7 @@ public class Board implements Constants {
 			for (int j = 0; j < 3; j++)
 				theBoard[i][j] = SPACE_CHAR;
 		}
+		this.id = id;
 	}
 
 	/**
@@ -29,6 +31,13 @@ public class Board implements Constants {
 	 */
 	public char getMark(int row, int col) {
 		return theBoard[row][col];
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
 	}
 
 	/**

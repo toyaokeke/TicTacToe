@@ -35,14 +35,24 @@ public class GameListener implements ActionListener, Constants {
 		}
 	}
 	
+	/**
+	 * Makes the game board responsive to a player's click action.
+	 */
 	public void unlockGameBoard() {
 		playerActive = true;
 	}
 	
+	/**
+	 * Makes the game board unresponsive to a player's click action.
+	 */
 	public void lockGameBoard() {
 		playerActive = false;
 	}
 
+	/**
+	 * Checks if a player's board is listening.
+	 * @return True if the board is listening. 
+	 */
 	public boolean isActive() {
 		return playerActive;
 	}
@@ -57,25 +67,54 @@ public class GameListener implements ActionListener, Constants {
 		return printString;
 	}
 	
+	/**
+	 * Tells the GUI to update its player character portion.
+	 * @param charArr The player character to set.
+	 */
 	public void setPlayerMark(char charArr) {
 		gameWindow.setPlayerChar(charArr);
 	}
 	
+	/**
+	 * Appends a message to the GUI.
+	 * @param incomingLine The new message to append.
+	 */
+	public void appendMessage(String incomingLine) {
+		gameWindow.appendTextArea(incomingLine);
+	}
+	
+	/**
+	 * Updates the GUI board.
+	 * @param incomingLine The board conditions flattened into a String.
+	 */
+	public void updateBoard(String incomingLine) {
+		char[] incomingBoard = incomingLine.toCharArray();
+		gameWindow.updateBoard(incomingBoard);
+	}
+	
+	/**
+	 * Tells the GUI to display a dialog box for the user to enter in the player name.
+	 * @return The player name.
+	 */
+	public String pollPlayerName() {
+		return gameWindow.pollPlayerNameDialog();
+	}
+	
+	/**
+	 * Tells the GUI to display a dialog box for the user to enter in the server address.
+	 * @return The server address.
+	 */
+	private String getIP() {
+		return gameWindow.showIPDialog();
+	}
+	
 	public static void main(String[] args) {
-//		To run a Tic Tac Toe game on separate computers, please enter the IPv4 address of the server
 		GameListener gameListener = new GameListener();
 		GameWindow gameWindow = new GameWindow(gameListener);
 		gameListener.setGameWindow(gameWindow);
 		
-		TicTacToeClient demoClient = new TicTacToeClient("localhost", 9999, gameListener);
+		String serverAddress = gameListener.getIP();
+		TicTacToeClient demoClient = new TicTacToeClient(serverAddress, 9999, gameListener);
 		demoClient.runningState();
-	}
-	
-	public void appendMessage(String incomingLine) {
-		gameWindow.appendTextArea(incomingLine);
-	}
-	public void updateBoard(String incomingLine) {
-		char[] incomingBoard = incomingLine.toCharArray();
-		gameWindow.updateBoard(incomingBoard);
 	}
 }

@@ -1,4 +1,4 @@
-package server.model;
+package Ex5Files.server.model;
 
 import java.io.IOException;
 

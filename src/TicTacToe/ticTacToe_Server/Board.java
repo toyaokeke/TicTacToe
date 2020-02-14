@@ -62,7 +62,8 @@ public class Board implements Constants {
 	}
 
 	/**
-	 * Displays the game board in console.
+	 * Displays the game board in console and returns the displayed String.
+	 * @return The string of the graphic displayed in the console.
 	 */
 	public String display() {
 		boardString = "";

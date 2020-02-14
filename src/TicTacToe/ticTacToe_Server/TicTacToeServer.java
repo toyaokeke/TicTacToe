@@ -17,6 +17,10 @@ public class TicTacToeServer {
 	private final ExecutorService pool;
 	int port;
 
+	/**
+	 * Creates a new server at a specified port and creates a CachedThreadPool
+	 * @param port The port number on which game communications are to be setup.
+	 */
 	public TicTacToeServer(int port){
 		pool = Executors.newCachedThreadPool();
 		try{
@@ -28,6 +32,9 @@ public class TicTacToeServer {
 		}
 	}
 
+	/**
+	 * Accepts connections to the server and starts a game once at least two players have connected
+	 */
 	public void acceptConnections(){
 		try {
 			while(true) {
@@ -53,6 +60,9 @@ public class TicTacToeServer {
 		}
 	}
 
+	/**
+	 * Creates a new game for two players and add game to thread pool
+	 */
 	private void startGame() {
 		Game game = new Game(socketIn, socketOut, socketIn2, socketOut2);
 		pool.execute(game);

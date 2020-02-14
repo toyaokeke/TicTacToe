@@ -14,8 +14,12 @@ public class Game implements Constants, Runnable {
 	private BufferedReader socketIn, socketIn2;
 
 	/**
-	 * TODO: Edit javadoc
-	 * Default constructor for class Game. initializes a blank game board.
+	 * The parameter constructor for a Game runnable. This takes in the IO streams of both players
+	 * and initializes a new board.
+	 * @param socketIn Player X input stream
+	 * @param socketOut Player X output stream
+	 * @param socketIn2 Player O input stream
+	 * @param socketOut2 Player O output stream
 	 */
 	public Game(BufferedReader socketIn, PrintWriter socketOut, BufferedReader socketIn2, PrintWriter socketOut2) {
 		this.socketIn = socketIn;
@@ -35,6 +39,9 @@ public class Game implements Constants, Runnable {
 		theRef.runTheGame();
 	}
 
+	/**
+	 * The runnable method which polls the players for their names and then implements the game mechanic.
+	 */
 	@Override
 	public void run() {
 		//Establish Referee and Player objects

@@ -50,9 +50,12 @@ public class Player{
 	//CONSTRUCTOR
 	/**
 	 * Constructs an object of class Player according to the specific
-	 * name and mark received. Opponent and board will remain unassigned.
+	 * name and mark received. The IO streams are passed to this object for
+	 * communicating with the server. Opponent and board will remain unassigned.
 	 * @param name	The name to set for the player.
 	 * @param mark	The mark to set for the player.
+	 * @param socketIn The BufferedReader for reading data from the player.
+	 * @param socketOut THe PrintWriter for writing data to the player.
 	 */
 	public Player(String name, char mark, BufferedReader socketIn, PrintWriter socketOut) {
 		this.name = name;
@@ -67,7 +70,7 @@ public class Player{
 	 * Represents a move from the player, takes information entered by
 	 * the player and displays it on the board, if valid. Then, passes 
 	 * move to the opponent.
-	 * @throws IOException When game could not poll for human input.
+	 * @throws IOException When game could not poll for client app input.
 	 */
 	public void play() {
 		if(!gameActive()) {
@@ -96,6 +99,10 @@ public class Player{
 		opponent.play();
 	}
 
+	/**
+	 * Prints board to console along with initial message
+	 * @param end boolean that states whether game is over or not
+	 */
 	private void displayBoard(boolean end) {
 		if(!end)
 			socketOut.println("The current board: ");
@@ -103,11 +110,18 @@ public class Player{
 			socketOut.println("Game ending board: ");
 		socketOut.println(board.display());
 	}
-	
+
+	/**
+	 * Notifies player that opponent is making their move
+	 */
 	private void printWaitingMessage() {
 		socketOut.println("Waiting for " + opponent.name + " to make a move.");
 	}
 
+	/**
+	 * Shuts down connection to game if game has end or a player has left
+	 * @param error true if a player has disconnected
+	 */
 	private void endGame(boolean error) {
 		if(!error) {
 			displayBoard(true);
