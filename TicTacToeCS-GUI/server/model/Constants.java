@@ -1,4 +1,4 @@
-package Ex5Files.server.model;
+package server.model;
 
 public interface Constants {
 	static final char SPACE_CHAR = ' ';

@@ -1,4 +1,4 @@
-package Ex5Files.server.control;
+package server.control;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import Ex5Files.server.model.Game;
+import server.model.Game;
 
 public class TicTacToeServer {
 	private ServerSocket serverSocket;
@@ -19,9 +19,9 @@ public class TicTacToeServer {
 	private final ExecutorService pool;
 	int port;
 
-	public TicTacToeServer(int port){
+	public TicTacToeServer(int port) {
 		pool = Executors.newCachedThreadPool();
-		try{
+		try {
 			this.port = port;
 			serverSocket = new ServerSocket(this.port);
 			System.out.println("Server started.");
@@ -31,15 +31,15 @@ public class TicTacToeServer {
 	}
 
 	/**
-	 * Accepts player connections. Once two players are connected they are assigned a game ID
-	 * before the game is executed. If there is an error connecting a player the cancelled and
-	 * the connection to the server is closed
+	 * Accepts player connections. Once two players are connected they are assigned
+	 * a game ID before the game is executed. If there is an error connecting a
+	 * player the cancelled and the connection to the server is closed
 	 */
-	public void acceptConnections(){
+	public void acceptConnections() {
 		int gameID = 1;
 		String[] playerNames = new String[2];
 		boolean playerConnected;
-		while(true) {
+		while (true) {
 			playerConnected = false;
 			try {
 				socket = serverSocket.accept();
@@ -52,7 +52,7 @@ public class TicTacToeServer {
 				playerNames[0] = socketIn.readLine();
 				System.out.println("[GAME " + gameID + "]: Player 1 name: " + playerNames[0] + ".");
 				socketOut.println("Connected to server as the first player, waiting for second player to join...");
-				
+
 				playerConnected = true;
 
 				socket2 = serverSocket.accept();
@@ -69,28 +69,28 @@ public class TicTacToeServer {
 
 				startGame(playerNames, gameID);
 				gameID++;
-			} catch (IOException e){
+			} catch (IOException e) {
 				System.err.println("[GAME " + gameID + "]: Unable to connect to client. Cancelling game start.");
 				e.printStackTrace();
-				if(playerConnected) {
+				if (playerConnected) {
 					socketOut.println("An unexpected error has occurred...");
 					socketOut.println("SERVER: game over");
 					try {
 						socketIn.close();
 						socketOut.close();
-					}
-					catch (IOException e1) {
+					} catch (IOException e1) {
 						e.printStackTrace();
 					}
 				}
 			}
-		} 
+		}
 	}
 
 	/**
 	 * Starts a game in the threadpool using the two player names and game ID
+	 * 
 	 * @param names names of player X and O
-	 * @param id game ID
+	 * @param id    game ID
 	 */
 	private void startGame(String[] names, int id) {
 		Game game = new Game(socketIn, socketOut, socketIn2, socketOut2, id, names);

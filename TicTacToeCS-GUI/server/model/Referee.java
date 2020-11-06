@@ -1,17 +1,18 @@
-package Ex5Files.server.model;
+package server.model;
 
 import java.io.IOException;
 
 public class Referee {
-	
+
 	private Player xPlayer, oPlayer;
 
-////////////////////////////////////////////////////////////////
-//INSTANCE METHODS
+	////////////////////////////////////////////////////////////////
+	// INSTANCE METHODS
 
 	/**
 	 * Sets the 'O' Player to the referee.
-	 * @param oPlayer	The player to set for 'O'.
+	 * 
+	 * @param oPlayer The player to set for 'O'.
 	 */
 	public void setoPlayer(Player oPlayer) {
 		this.oPlayer = oPlayer;
@@ -19,7 +20,8 @@ public class Referee {
 
 	/**
 	 * Sets the 'X' Player to the referee.
-	 * @param xPlayer	The player to set for 'X'.
+	 * 
+	 * @param xPlayer The player to set for 'X'.
 	 */
 	public void setxPlayer(Player xPlayer) {
 		this.xPlayer = xPlayer;
@@ -28,16 +30,17 @@ public class Referee {
 	/**
 	 * Start the game by assigning the opponents of each player to one another,
 	 * displaying the board, and polling the first player for first move.
+	 * 
 	 * @throws IOException When game could not poll for human input.
 	 */
 	public void runTheGame() {
 		setOpponents();
 		xPlayer.play();
 	}
-	
-////////////////////////////////////////////////////////////////
-//HELPER METHODS
-	
+
+	////////////////////////////////////////////////////////////////
+	// HELPER METHODS
+
 	/**
 	 * Sets the opponents of each player to each other.
 	 */

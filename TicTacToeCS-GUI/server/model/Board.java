@@ -1,7 +1,6 @@
-package Ex5Files.server.model;
+package server.model;
 
 //STUDENTS SHOULD ADD CLASS COMMENTS, METHOD COMMENTS, FIELD COMMENTS 
-
 
 public class Board implements Constants {
 	private char theBoard[][];
@@ -10,7 +9,8 @@ public class Board implements Constants {
 	private int id;
 
 	/**
-	 * Default constructor for Class Board. Initiates the board space and sets markCount to 0.
+	 * Default constructor for Class Board. Initiates the board space and sets
+	 * markCount to 0.
 	 */
 	public Board(int id) {
 		markCount = 0;
@@ -25,14 +25,15 @@ public class Board implements Constants {
 
 	/**
 	 * Gets the mark at the specified board location
-	 * @param row	The row of the location
-	 * @param col	The column of the location
-	 * @return	The mark at the location
+	 * 
+	 * @param row The row of the location
+	 * @param col The column of the location
+	 * @return The mark at the location
 	 */
 	public char getMark(int row, int col) {
 		return theBoard[row][col];
 	}
-	
+
 	/**
 	 * @return the id
 	 */
@@ -42,6 +43,7 @@ public class Board implements Constants {
 
 	/**
 	 * Checks if the board has been fully populated with player moves
+	 * 
 	 * @return True if board is full, false if not full.
 	 */
 	public boolean isFull() {
@@ -50,6 +52,7 @@ public class Board implements Constants {
 
 	/**
 	 * Checks if player x has won.
+	 * 
 	 * @return True if player x has won, false otherwise.
 	 */
 	public boolean xWins() {
@@ -61,6 +64,7 @@ public class Board implements Constants {
 
 	/**
 	 * Checks if player o has won.
+	 * 
 	 * @return True if player o has won, false otherwise.
 	 */
 	public boolean oWins() {
@@ -79,13 +83,13 @@ public class Board implements Constants {
 		addHyphens();
 		for (int row = 0; row < 3; row++) {
 			addSpaces();
-//			System.out.print("    row " + row + ' ');
+			// System.out.print(" row " + row + ' ');
 			boardString += "    row " + row + ' ';
 			for (int col = 0; col < 3; col++) {
-//				System.out.print("|  " + getMark(row, col) + "  ");
+				// System.out.print("| " + getMark(row, col) + " ");
 				boardString += "|  " + getMark(row, col) + "  ";
 			}
-//			System.out.println("|");
+			// System.out.println("|");
 			boardString += "|\n";
 			addSpaces();
 			addHyphens();
@@ -96,12 +100,13 @@ public class Board implements Constants {
 
 	/**
 	 * Add a mark on the board from a player. Increments markCount.
-	 * @param row	Row of the mark being added.
-	 * @param col	Column of the mark being added.
-	 * @param mark	The player's mark.
+	 * 
+	 * @param row  Row of the mark being added.
+	 * @param col  Column of the mark being added.
+	 * @param mark The player's mark.
 	 */
 	public void addMark(int row, int col, char mark) {
-		
+
 		theBoard[row][col] = mark;
 		markCount++;
 	}
@@ -117,9 +122,11 @@ public class Board implements Constants {
 	}
 
 	/**
-	 * Checks if there is a row, column, or diagonal with 3 consecutive player marks.
-	 * @param mark	The player mark to be checked.
-	 * @return	1 if there are 3 consecutive marks, 0 otherwise.
+	 * Checks if there is a row, column, or diagonal with 3 consecutive player
+	 * marks.
+	 * 
+	 * @param mark The player mark to be checked.
+	 * @return 1 if there are 3 consecutive marks, 0 otherwise.
 	 */
 	int checkWinner(char mark) {
 		int row, col;
@@ -134,7 +141,6 @@ public class Board implements Constants {
 				result = 1;
 		}
 
-		
 		for (col = 0; result == 0 && col < 3; col++) {
 			int col_result = 1;
 			for (row = 0; col_result != 0 && row < 3; row++)
@@ -167,13 +173,13 @@ public class Board implements Constants {
 	 * Displays column headers to the board.
 	 */
 	void displayColumnHeaders() {
-//		System.out.print("          ");
+		// System.out.print(" ");
 		boardString += "          ";
 		for (int j = 0; j < 3; j++) {
-//			System.out.print("|col " + j);
+			// System.out.print("|col " + j);
 			boardString += "|col " + j;
 		}
-//		System.out.println();
+		// System.out.println();
 		boardString += "\n";
 	}
 
@@ -181,13 +187,13 @@ public class Board implements Constants {
 	 * Displays board row divisions in console.
 	 */
 	void addHyphens() {
-//		System.out.print("          ");
+		// System.out.print(" ");
 		boardString += "          ";
 		for (int j = 0; j < 3; j++) {
-//			System.out.print("+-----");
+			// System.out.print("+-----");
 			boardString += "+-----";
 		}
-//		System.out.println("+");
+		// System.out.println("+");
 		boardString += "+\n";
 	}
 
@@ -195,23 +201,23 @@ public class Board implements Constants {
 	 * Displays board column divisions in console.
 	 */
 	void addSpaces() {
-//		System.out.print("          ");
+		// System.out.print(" ");
 		boardString += "          ";
 		for (int j = 0; j < 3; j++) {
-//			System.out.print("|     ");
+			// System.out.print("| ");
 			boardString += "|     ";
 		}
-//		System.out.println("|");
+		// System.out.println("|");
 		boardString += "|\n";
 	}
 
 	public void updateBoard(String incomingBoard) {
 		char[] updatedBoard = incomingBoard.toCharArray();
 		markCount = 0;
-		for(int i = 0; i < 3; i++) {
-			for(int j = 0; j < 3; j++) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
 				theBoard[i][j] = updatedBoard[i * 3 + j];
-				if(theBoard[i][j] != SPACE_CHAR)
+				if (theBoard[i][j] != SPACE_CHAR)
 					markCount++;
 			}
 		}
@@ -219,8 +225,8 @@ public class Board implements Constants {
 
 	public String getBoardString() {
 		String printString = "";
-		for(int i = 0; i < 3; i++) {
-			for(int j = 0; j < 3; j++) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
 				printString += Character.toString(theBoard[i][j]);
 			}
 		}

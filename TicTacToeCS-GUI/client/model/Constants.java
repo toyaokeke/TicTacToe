@@ -1,5 +1,4 @@
-package Ex5Files.client.model;
-
+package client.model;
 
 public interface Constants {
 	static final String SPACE_CHAR = " ";

@@ -1,8 +1,8 @@
-package Ex5Files.server.model;
+package server.model;
 
 import java.io.*;
 
-public class Player{
+public class Player {
 
 	private Board board;
 	private Player opponent;
@@ -13,7 +13,7 @@ public class Player{
 	private BufferedReader socketIn;
 
 	////////////////////////////////////////////////////////////////
-	//GETTERS AND SETTERS
+	// GETTERS AND SETTERS
 
 	/**
 	 * @return the playerMark
@@ -21,14 +21,17 @@ public class Player{
 	public char getMark() {
 		return mark;
 	}
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
+
 	/**
 	 * Sets the mark of the player.
+	 * 
 	 * @param mark The mark to set for the player.
 	 */
 	public void setMark(char mark) {
@@ -36,12 +39,13 @@ public class Player{
 	}
 
 	////////////////////////////////////////////////////////////////
-	//CONSTRUCTOR
+	// CONSTRUCTOR
 	/**
-	 * Constructs an object of class Player according to the specific
-	 * name and mark received. Opponent and board will remain unassigned.
-	 * @param name	The name to set for the player.
-	 * @param mark	The mark to set for the player.
+	 * Constructs an object of class Player according to the specific name and mark
+	 * received. Opponent and board will remain unassigned.
+	 * 
+	 * @param name The name to set for the player.
+	 * @param mark The mark to set for the player.
 	 */
 	public Player(String name, char mark, BufferedReader socketIn, PrintWriter socketOut) {
 		this.name = name;
@@ -51,15 +55,15 @@ public class Player{
 	}
 
 	////////////////////////////////////////////////////////////////
-	//INSTANCE METHODS
+	// INSTANCE METHODS
 	/**
-	 * Represents a move from the player, takes information entered by
-	 * the player and displays it on the board, if valid. Then, passes 
-	 * move to the opponent.
+	 * Represents a move from the player, takes information entered by the player
+	 * and displays it on the board, if valid. Then, passes move to the opponent.
+	 * 
 	 * @throws IOException When game could not poll for human input.
 	 */
 	public void play() {
-		if(!gameActive()) {
+		if (!gameActive()) {
 			opponent.gameActive();
 			System.out.println("[GAME " + board.getId() + "]: Game Finished. Shutting down game...");
 			endGame(false);
@@ -76,33 +80,30 @@ public class Player{
 			try {
 				socketIn.close();
 				socketOut.close();
-			}
-			catch (IOException e1) {
+			} catch (IOException e1) {
 				e.printStackTrace();
 			}
 			return;
 		}
 		opponent.play();
 	}
-	
+
 	private void printWaitingMessage() {
 		socketOut.println("Waiting for opponent to make a move.");
 	}
 
 	private void endGame(boolean error) {
-		if(!error) {
+		if (!error) {
 			socketOut.println("Game is over.");
 			socketOut.println("SERVER: game over");
-		}
-		else {
+		} else {
 			socketOut.println("Unable to get input from opponent. Shutting down game...");
 			socketOut.println("SERVER: game over");
 		}
 		try {
 			socketIn.close();
 			socketOut.close();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -111,6 +112,7 @@ public class Player{
 	 * Polls the current player for row and column to place the mark. Move will be
 	 * successful if row and column numbers are within the board and the space not
 	 * already populated.
+	 * 
 	 * @throws IOException When game could not poll for human input.
 	 */
 	public void makeMove() throws IOException {
@@ -129,9 +131,11 @@ public class Player{
 		socketOut.println("SERVER: board update");
 		socketOut.println(board.getBoardString());
 	}
+
 	/**
 	 * Sets the opponent of the player.
-	 * @param opponent	The opponent to set.
+	 * 
+	 * @param opponent The opponent to set.
 	 */
 	public void setOpponent(Player opponent) {
 		this.opponent = opponent;
@@ -140,36 +144,35 @@ public class Player{
 
 	/**
 	 * Sets the board for the game.
-	 * @param board	The board to set.
+	 * 
+	 * @param board The board to set.
 	 */
 	public void setBoard(Board board) {
 		this.board = board;
 	}
 
 	////////////////////////////////////////////////////////////////
-	//HELPER METHODS
+	// HELPER METHODS
 	/**
-	 * Checks if game is still active by checking if player X or player O has
-	 * won or if the game board is full. Displays appropriate message if game
-	 * is over.
-	 * @return	True if game is not over. False otherwise.
+	 * Checks if game is still active by checking if player X or player O has won or
+	 * if the game board is full. Displays appropriate message if game is over.
+	 * 
+	 * @return True if game is not over. False otherwise.
 	 */
 	private Boolean gameActive() {
-		if(board.xWins()) {
-			if(mark == 'X')
+		if (board.xWins()) {
+			if (mark == 'X')
 				socketOut.println("You win!");
 			else
 				socketOut.println("You lost to: " + opponent.name + ".");
 			return false;
-		}
-		else if(board.oWins()) {
-			if(mark == 'O')
+		} else if (board.oWins()) {
+			if (mark == 'O')
 				socketOut.println("You win!");
 			else
 				socketOut.println("You lost to: " + opponent.name + ".");
 			return false;
-		}
-		else if(board.isFull()) {
+		} else if (board.isFull()) {
 			socketOut.println("Board is full. It's a tie!");
 			return false;
 		}

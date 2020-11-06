@@ -1,14 +1,12 @@
-package Ex5Files.client.view;
+package client.view;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
 import java.awt.*;
 
-import Ex5Files.client.control.GameListener;
-import Ex5Files.client.model.Constants;
-
-
+import client.control.GameListener;
+import client.model.Constants;
 
 public class GameWindow extends JFrame implements Constants {
 	private JButton[][] gameButtons;
@@ -23,14 +21,14 @@ public class GameWindow extends JFrame implements Constants {
 	public GameWindow(GameListener gameListener) {
 		super("Game Window");
 		this.gameListener = gameListener;
-		//Buttons for the game
+		// Buttons for the game
 		JPanel gamePanel = new JPanel();
-		gamePanel.setLayout(new GridLayout(3,3));
+		gamePanel.setLayout(new GridLayout(3, 3));
 		gameButtons = new JButton[3][3];
-		for(int i = 0; i < 3; i++) {
-			for(int j = 0; j < 3; j++) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
 				gameButtons[i][j] = new JButton();
-				gameButtons[i][j].setPreferredSize(new Dimension(50,50));
+				gameButtons[i][j].setPreferredSize(new Dimension(50, 50));
 				gameButtons[i][j].addActionListener(this.gameListener);
 				gameButtons[i][j].setText(SPACE_CHAR);
 				gamePanel.add(gameButtons[i][j]);
@@ -38,21 +36,21 @@ public class GameWindow extends JFrame implements Constants {
 		}
 		add(gamePanel, BorderLayout.WEST);
 
-		//The message box
+		// The message box
 		JPanel messagePanel = new JPanel();
 		messagePanel.setLayout(new BorderLayout());
 		messagePanel.add(new JLabel("Message Window: "), BorderLayout.NORTH);
 		messageArea = new JTextArea();
 		messageArea.setEditable(false);
-		DefaultCaret caret = (DefaultCaret)messageArea.getCaret();
+		DefaultCaret caret = (DefaultCaret) messageArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		JScrollPane scrollMessage = new JScrollPane(messageArea);
 		scrollMessage.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollMessage.setPreferredSize(new Dimension(200,100));
+		scrollMessage.setPreferredSize(new Dimension(200, 100));
 		messagePanel.add(scrollMessage, BorderLayout.CENTER);
 		add(messagePanel, BorderLayout.CENTER);
 
-		//Player information
+		// Player information
 		JPanel playerPanel = new JPanel();
 		playerPanel.setLayout(new FlowLayout());
 		playerPanel.add(new JLabel("Player: "));
@@ -66,7 +64,8 @@ public class GameWindow extends JFrame implements Constants {
 		playerPanel.setAlignmentY(LEFT_ALIGNMENT);
 
 		add(playerPanel, BorderLayout.SOUTH);
-		//Closing a player's window ends the game and closes the other player's window too
+		// Closing a player's window ends the game and closes the other player's window
+		// too
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
@@ -89,6 +88,7 @@ public class GameWindow extends JFrame implements Constants {
 
 	/**
 	 * Sets a player mark at the specified row and column.
+	 * 
 	 * @param i The row for the mark.
 	 * @param j The column for the mark.
 	 */
@@ -96,9 +96,9 @@ public class GameWindow extends JFrame implements Constants {
 		gameButtons[i][j].setText(playerChar.getText());
 	}
 
-
 	/**
 	 * Sets a player as player X or player O.
+	 * 
 	 * @param charArr The player character to set.
 	 */
 	public void setPlayerChar(char charArr) {
@@ -107,6 +107,7 @@ public class GameWindow extends JFrame implements Constants {
 
 	/**
 	 * Appends a message to the bottom of the message area.
+	 * 
 	 * @param incomingLine The message to append.
 	 */
 	public void appendTextArea(String incomingLine) {
@@ -115,14 +116,16 @@ public class GameWindow extends JFrame implements Constants {
 
 	/**
 	 * Updates the board.
-	 * @param incomingBoard The current board state represented in a flat char array.
+	 * 
+	 * @param incomingBoard The current board state represented in a flat char
+	 *                      array.
 	 */
 	public void updateBoard(char[] incomingBoard) {
-		if(incomingBoard.length != 9)
+		if (incomingBoard.length != 9)
 			return;
 
-		for(int i = 0; i < 3; i++) {
-			for(int j = 0; j < 3; j++) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
 				gameButtons[i][j].setText(Character.toString(incomingBoard[i * 3 + j]));
 			}
 		}
@@ -130,11 +133,12 @@ public class GameWindow extends JFrame implements Constants {
 
 	/**
 	 * Displays a dialog for the player to enter their name.
+	 * 
 	 * @return The player's name.
 	 */
 	public String pollPlayerNameDialog() {
 		String name = JOptionPane.showInputDialog("Please enter your name:");
-		if(name == null  || name.equals(""))
+		if (name == null || name.equals(""))
 			name = "Player " + playerChar.getText();
 		setPlayerName(name);
 		return name;
@@ -143,11 +147,13 @@ public class GameWindow extends JFrame implements Constants {
 	/**
 	 * Displays a dialog for the player to enter the server address (IP address).
 	 * Will default to localhost if nothing is entered.
+	 * 
 	 * @return The IP address of the server.
 	 */
 	public String showIPDialog() {
-		String ipAddress = JOptionPane.showInputDialog("Please enter the server IP address, or leave it blank for 'localhost'.");
-		if(ipAddress == null || ipAddress.equals(""))
+		String ipAddress = JOptionPane
+				.showInputDialog("Please enter the server IP address, or leave it blank for 'localhost'.");
+		if (ipAddress == null || ipAddress.equals(""))
 			ipAddress = "localhost";
 
 		return ipAddress;
@@ -155,6 +161,7 @@ public class GameWindow extends JFrame implements Constants {
 
 	/**
 	 * Sets the player name in the textbox at the bottom right of the GUI window.
+	 * 
 	 * @param name The player name to set.
 	 */
 	private void setPlayerName(String name) {

@@ -1,9 +1,8 @@
-package Ex5Files.server.model;
+package server.model;
 
 import java.io.*;
 
 //STUDENTS SHOULD ADD CLASS COMMENTS, METHOD COMMENTS, FIELD COMMENTS 
-
 
 public class Game implements Constants, Runnable {
 
@@ -12,24 +11,26 @@ public class Game implements Constants, Runnable {
 
 	private PrintWriter socketOut, socketOut2;
 	private BufferedReader socketIn, socketIn2;
-	
+
 	private String[] playerNames;
 
 	/**
-	 * TODO: Edit javadoc
-	 * Default constructor for class Game. initializes a blank game board.
+	 * TODO: Edit javadoc Default constructor for class Game. initializes a blank
+	 * game board.
 	 */
-	public Game(BufferedReader socketIn, PrintWriter socketOut, BufferedReader socketIn2, PrintWriter socketOut2, int id, String[] playerNames) {
+	public Game(BufferedReader socketIn, PrintWriter socketOut, BufferedReader socketIn2, PrintWriter socketOut2,
+			int id, String[] playerNames) {
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 		this.socketIn2 = socketIn2;
 		this.socketOut2 = socketOut2;
-		theBoard  = new Board(id);
+		theBoard = new Board(id);
 		this.playerNames = playerNames;
 	}
 
 	/**
 	 * Assigns a referee to the game, and starts the game.
+	 * 
 	 * @param r The Referee to be assigned.
 	 * @throws IOException When game could not poll for human input.
 	 */
@@ -40,7 +41,7 @@ public class Game implements Constants, Runnable {
 
 	@Override
 	public void run() {
-		//Establish Referee and Player objects
+		// Establish Referee and Player objects
 		Referee theRef;
 		Player xPlayer, oPlayer;
 		printWelcomeMessage();
@@ -55,18 +56,16 @@ public class Game implements Constants, Runnable {
 		theRef.setoPlayer(oPlayer);
 		theRef.setxPlayer(xPlayer);
 
-
 		appointReferee(theRef);
-
 
 	}
 
-	//HELPER METHODS
+	// HELPER METHODS
 	/**
 	 * Prints a welcome message and displays the initial board.
 	 */
 	private void printWelcomeMessage() {
-//		System.out.println("Welcome to tic-tac-toe. Here is your board:");
+		// System.out.println("Welcome to tic-tac-toe. Here is your board:");
 		socketOut.println("Welcome to tic-tac-toe!");
 		socketOut2.println("Welcome to tic-tac-toe!");
 	}
