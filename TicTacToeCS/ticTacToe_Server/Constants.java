@@ -1,4 +1,4 @@
-package Ex4Files.ticTacToe_Server;
+package ticTacToe_Server;
 
 public interface Constants {
 	static final char SPACE_CHAR = ' ';

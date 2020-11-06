@@ -1,4 +1,4 @@
-package Ex4Files.ticTacToe_Client;
+package ticTacToe_Client;
 
 import java.io.BufferedReader;
 import java.io.IOException;

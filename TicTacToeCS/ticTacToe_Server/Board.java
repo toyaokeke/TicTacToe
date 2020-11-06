@@ -1,4 +1,4 @@
-package Ex4Files.ticTacToe_Server;
+package ticTacToe_Server;
 
 //STUDENTS SHOULD ADD CLASS COMMENTS, METHOD COMMENTS, FIELD COMMENTS 
 
