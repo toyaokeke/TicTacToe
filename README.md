@@ -1,8 +1,9 @@
 # TicTacToe
-## TicTacToeCSGUI (Toya Okeke and Zixin (James) Chen)
+
+## TicTacToeCSGUI
 Simple Tic Tac Toe  game using client-server architecture and MVC modelling
 
-## TicTacToeCS (Toya Okeke and Zixin (James) Chen)
+## TicTacToeCS
 Similar to above but no GUI
 
 ## TicTacToeComputer
